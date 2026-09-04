@@ -1,0 +1,383 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <canvas id="hero-net" class="hero-net"></canvas>
+    <div class="hero-glow hero-glow--a"></div>
+    <div class="hero-glow hero-glow--b"></div>
+    <div class="container hero-inner">
+      <div class="hero-copy reveal">
+        <div class="eyebrow-line"><span class="dot"></span> Available for opportunities · {{ profile.location }}</div>
+
+        <h1 class="hero-title">
+          <span class="line">Hi, I'm {{ profile.first_name }}.</span>
+          <span class="line accent-text">I build with code &amp; data.</span>
+        </h1>
+
+        <div class="hero-role mono">
+          <span id="hero-role-text"></span><span class="caret"></span>
+        </div>
+        {{ profile.role_titles|json_script:"hero-roles-json" }}
+
+        <p class="hero-lede">{{ profile.tagline }}</p>
+
+        <div class="hero-ctas">
+          <a href="#contact" class="btn btn-primary">Get in touch</a>
+          <a href="{{ profile.resume_url }}" class="btn btn-ghost" download>Download CV</a>
+        </div>
+
+        <div class="hero-meta">
+          <span>📍 {{ profile.location }}</span>
+          <span>🎓 BSc (Hons) Computing with AI</span>
+          <span><img src="{% static 'main/images/islington-logo.png' %}" alt="">Graduate Teaching Assistant</span>
+        </div>
+      </div>
+
+      <div class="hero-portrait-wrap reveal">
+        <div class="hero-badge-float hero-badge-float--top mono">
+          <span class="dot-live"></span> Open to work
+        </div>
+        <div class="hero-portrait">
+          <img src="{% static 'main/images/profile.png' %}" alt="Portrait of {{ profile.full_name }}">
+        </div>
+        <div class="hero-badge-float hero-badge-float--bottom mono">
+          🐍 Python · ☕ Java
+        </div>
+        <div class="hero-portrait-tag mono">
+          <img src="{% static 'main/images/islington-logo.png' %}" alt="Islington College crest">
+          currently @ Islington College
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== STATS STRIP ===================== -->
+  <section class="stats-strip">
+    <div class="container">
+      <div class="stats-grid reveal-stagger pop-stagger">
+        <div class="stat-cell">
+          <span class="stat-number" data-target="{{ projects|length }}">0</span>
+          <span class="stat-label">PROJECTS BUILT</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-number" data-target="{{ certifications|length }}">0</span>
+          <span class="stat-label">CERTIFICATIONS</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-number" data-target="2" data-suffix="+">0</span>
+          <span class="stat-label">LANGUAGES · PY / JAVA</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-number" data-target="{{ experience|length }}" data-suffix="">0</span>
+          <span class="stat-label">ROLES &amp; INTERNSHIPS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MARQUEE ===================== -->
+  <div class="marquee">
+    <div class="marquee-track">
+      {% for group, items in skills.items %}{% for item in items %}
+      <span class="marquee-item">{{ item }} <span class="dot-sep">✦</span></span>
+      {% endfor %}{% endfor %}
+      {% for group, items in skills.items %}{% for item in items %}
+      <span class="marquee-item">{{ item }} <span class="dot-sep">✦</span></span>
+      {% endfor %}{% endfor %}
+    </div>
+  </div>
+  <div class="marquee marquee--dim">
+    <div class="marquee-track marquee-track--reverse">
+      {% for role in profile.role_titles %}
+      <span class="marquee-item">{{ role }} <span class="dot-sep">✦</span></span>
+      {% endfor %}
+      {% for s in soft_skills %}
+      <span class="marquee-item">{{ s }} <span class="dot-sep">✦</span></span>
+      {% endfor %}
+      {% for role in profile.role_titles %}
+      <span class="marquee-item">{{ role }} <span class="dot-sep">✦</span></span>
+      {% endfor %}
+      {% for s in soft_skills %}
+      <span class="marquee-item">{{ s }} <span class="dot-sep">✦</span></span>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about" class="section">
+    <div class="section-ambient section-ambient--tl" data-parallax="0.06"></div>
+    <div class="section-ambient section-ambient--br" data-parallax="-0.05"></div>
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <span class="title-bar"></span><h2 class="section-title word-reveal">A little about how I work</h2>
+        </div>
+      </div>
+
+      <div class="about-grid">
+        <div class="reveal-left">
+          <div class="about-card">
+            <h4>Technical skills</h4>
+            {% for group, items in skills.items %}
+            <div class="skill-group">
+              <div class="skill-group-label">{{ group }}</div>
+              <div class="tag-row reveal-stagger pop-stagger">
+                {% for item in items %}<span class="tag">{{ item }}</span>{% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="about-card">
+            <h4>Soft skills</h4>
+            <div class="soft-skills reveal-stagger pop-stagger">
+              {% for s in soft_skills %}<span class="soft-skill">{{ s }}</span>{% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-right">
+          <p style="font-size:1.05rem; max-width: 62ch;">{{ profile.about }}</p>
+
+          <div class="about-card" style="margin-top: 28px;">
+            <h4>Education</h4>
+            <div class="timeline">
+              {% for edu in education %}
+              <div class="timeline-item {% if edu.current %}is-current{% endif %}">
+                <span class="timeline-period mono">{{ edu.period }}</span>
+                <div class="timeline-title-row">
+                  {% if "Islington" in edu.org %}
+                  <div class="org-logo-card"><img src="{% static 'main/images/islington-logo.png' %}" alt="Islington College crest"></div>
+                  {% endif %}
+                  <h4 class="timeline-title" style="margin-bottom:0;">{{ edu.title }}{% if edu.current %}<span class="badge-current">current</span>{% endif %}</h4>
+                </div>
+                <div class="timeline-org">{{ edu.org }}</div>
+                <p class="mono" style="margin:0; font-size:0.78rem; color: var(--text-faint);">{{ edu.location }}</p>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== EXPERIENCE ===================== -->
+  <section id="experience" class="section" style="background: var(--bg-alt);">
+    <div class="section-ambient section-ambient--tl" data-parallax="0.06"></div>
+    <div class="section-ambient section-ambient--br" data-parallax="-0.05"></div>
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <span class="title-bar"></span><h2 class="section-title word-reveal">Where I'm putting it into practice</h2>
+        </div>
+      </div>
+
+      <div class="timeline">
+        {% for job in experience %}
+        <div class="timeline-item {% if job.current %}is-current{% endif %} reveal-left">
+          <span class="timeline-period mono">{{ job.period }}</span>
+          <div class="timeline-title-row">
+            {% if "Islington" in job.org %}
+            <div class="org-logo-card"><img src="{% static 'main/images/islington-logo.png' %}" alt="Islington College crest"></div>
+            {% endif %}
+            <h3 class="timeline-title" style="margin-bottom:0;">{{ job.role }}{% if job.current %}<span class="badge-current">current</span>{% endif %}</h3>
+          </div>
+          <div class="timeline-org">{{ job.org }}</div>
+          <p style="max-width: 62ch;">{{ job.description }}</p>
+          <div class="tag-row reveal-stagger pop-stagger">
+            {% for t in job.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROJECTS ===================== -->
+  <section id="projects" class="section">
+    <div class="section-ambient section-ambient--tl" data-parallax="0.06"></div>
+    <div class="section-ambient section-ambient--br" data-parallax="-0.05"></div>
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <span class="title-bar"></span><h2 class="section-title word-reveal">Things I've built</h2>
+        </div>
+      </div>
+
+      <div class="project-grid reveal-stagger">
+        {% for p in projects %}
+        <div class="project-card {% if p.highlight %}is-highlight{% endif %}">
+          <span class="project-star" title="Featured project">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.8-6.2 3.8 1.6-7L2 9.2l7.1-.6L12 2z"/></svg>
+          </span>
+          <div class="project-top">
+            <div>
+              <span class="project-category mono">{{ p.category }}</span>
+              <h3 class="project-title">{{ p.title }}</h3>
+            </div>
+          </div>
+          <p class="project-desc">{{ p.description }}</p>
+          <div class="project-stack">
+            {% for s in p.stack %}<span class="tag">{{ s }}</span>{% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CERTIFICATIONS + ACHIEVEMENTS ===================== -->
+  <section id="certifications" class="section" style="background: var(--bg-alt);">
+    <div class="section-ambient section-ambient--tl" data-parallax="0.06"></div>
+    <div class="section-ambient section-ambient--br" data-parallax="-0.05"></div>
+    <div class="container">
+      <div class="two-col">
+        <div>
+          <div class="section-head reveal" style="margin-bottom: 28px;">
+            <div>
+              <span class="title-bar"></span><h2 class="section-title word-reveal" style="font-size:1.5rem;">Training &amp; certification</h2>
+            </div>
+          </div>
+          <div class="cert-list reveal-stagger">
+            {% for c in certifications %}
+            <div class="cert-item">
+              <span class="cert-date mono">{{ c.date }}</span>
+              <div>
+                <h4 class="cert-title">{{ c.title }}</h4>
+                <span class="cert-issuer">{{ c.issuer }}</span>
+                <p class="cert-desc">{{ c.description }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div>
+          <div class="section-head reveal" style="margin-bottom: 28px;">
+            <div>
+              <span class="title-bar"></span><h2 class="section-title word-reveal" style="font-size:1.5rem;">Awards &amp; achievements</h2>
+            </div>
+          </div>
+          <ul class="achv-list reveal-stagger">
+            {% for a in achievements %}
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+              {{ a }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section id="contact" class="section">
+    <div class="section-ambient section-ambient--tl" data-parallax="0.06"></div>
+    <div class="section-ambient section-ambient--br" data-parallax="-0.05"></div>
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <span class="title-bar"></span><h2 class="section-title word-reveal">Let's build something together</h2>
+        </div>
+      </div>
+
+      <div class="contact-wrap">
+        <div class="contact-info reveal-left">
+          <h3>Feel free to reach out</h3>
+          <p>
+            Whether it's an internship, a graduate role, a collaboration on an AI project, or just a
+            question about something I've built — my inbox is open. I usually reply within a day or two.
+          </p>
+
+          <div class="contact-channels reveal-stagger">
+            <a class="contact-channel" href="mailto:{{ profile.email }}">
+              <span class="icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/></svg>
+              </span>
+              <span>
+                <span class="label">EMAIL</span><br>
+                <span class="value">{{ profile.email }}</span>
+              </span>
+            </a>
+            <a class="contact-channel" href="tel:{{ profile.phone }}">
+              <span class="icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.12.9.34 1.79.65 2.65a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.43-1.27a2 2 0 012.11-.45c.86.31 1.75.53 2.65.65A2 2 0 0122 16.92z"/></svg>
+              </span>
+              <span>
+                <span class="label">PHONE</span><br>
+                <span class="value">{{ profile.phone }}</span>
+              </span>
+            </a>
+            <a class="contact-channel" href="{{ profile.linkedin }}" target="_blank" rel="noopener">
+              <span class="icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              </span>
+              <span>
+                <span class="label">LINKEDIN</span><br>
+                <span class="value">Connect with me</span>
+              </span>
+            </a>
+            <a class="contact-channel" href="{{ profile.github }}" target="_blank" rel="noopener">
+              <span class="icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+              </span>
+              <span>
+                <span class="label">GITHUB</span><br>
+                <span class="value">View my code</span>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <form id="contact-form" class="contact-form reveal-right" action="{% url 'main:contact_submit' %}" method="post" novalidate>
+          {% csrf_token %}
+          <div class="form-row two">
+            <div>
+              <label class="form-label" for="id_name">Name</label>
+              {{ contact_form.name }}
+            </div>
+            <div>
+              <label class="form-label" for="id_email">Email</label>
+              {{ contact_form.email }}
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-label" for="id_subject">Subject</label>
+            {{ contact_form.subject }}
+          </div>
+          <div class="form-row">
+            <label class="form-label" for="id_message">Message</label>
+            {{ contact_form.message }}
+          </div>
+          <div class="hp-field">{{ contact_form.company }}</div>
+
+          <div class="form-footer">
+            <button type="submit" class="btn btn-primary">
+              <span class="btn-spinner"></span>
+              <span class="btn-label">Send message</span>
+            </button>
+            <span id="form-status" class="form-status"></span>
+          </div>
+
+          <div class="form-alt-send mono">
+            or <a href="#" id="mailto-fallback">send it from your own email app →</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script id="mailto-template" type="application/json">{"email": "{{ profile.email }}"}</script>
+
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  .contact-form input, .contact-form textarea { }
+</style>
+{% endblock %}

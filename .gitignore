@@ -1,0 +1,28 @@
+# Environments
+.env
+venv/
+env/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Django
+db.sqlite3
+staticfiles/
+media/uploads/
+*.log
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Vercel
+.vercel/
+
+# Documentation
+README.md
