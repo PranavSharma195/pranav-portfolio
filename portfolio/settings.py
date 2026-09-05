@@ -118,8 +118,15 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "main" / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STORAGES = {
+    # Plain (non-hashed) compressed static storage. We deliberately avoid
+    # the "Manifest" variant here: on Vercel, static files are built by a
+    # separate build step from the Python app itself, so the manifest.json
+    # that ManifestStaticFilesStorage needs to resolve {% static %} tags
+    # isn't guaranteed to be visible to the running app. Cache-busting is
+    # instead handled manually via the "?v=N" query string on the CSS/JS
+    # tags in base.html.
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
