@@ -170,6 +170,30 @@ PROJECTS = [
         ),
         "highlight": True,
     },
+    {
+        "title": "Portfolio Project",
+        "category": "Personal Project",
+        "stack": ["Django", "Python", "HTML", "CSS", "JavaScript"],
+        "description": (
+            "This site — a personal portfolio built from scratch with "
+            "Django, featuring a light/dark theme, animated UI throughout, "
+            "and a working contact form that emails messages directly, "
+            "deployed live on Vercel."
+        ),
+        "highlight": True,
+    },
+    {
+        "title": "Brainify",
+        "category": "Personal Project",
+        # TODO: confirm exact tech stack (framework, model architecture, etc.)
+        "stack": ["Python", "Deep Learning"],
+        "description": (
+            "An AI-powered platform for brain tumor segmentation and "
+            "detection, using deep learning to identify and outline tumor "
+            "regions in medical scans."
+        ),
+        "highlight": True,
+    },
 ]
 
 CERTIFICATIONS = [
